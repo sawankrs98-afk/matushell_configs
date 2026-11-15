@@ -11,17 +11,8 @@ hl.config({
     },
 })
 
--- Three-finger vertical workspace navigation.
-hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "up", action = function()
-    hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
-end })
-hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "down", action = function()
-    hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
-end })
--- Three-finger horizontal focus follows the scrolling column layout.
-hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "left", action = function()
-    hl.dispatch(hl.dsp.focus({ direction = "l" }))
-end })
-hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "right", action = function()
-    hl.dispatch(hl.dsp.focus({ direction = "r" }))
-end })
+-- Workspace switching follows the vertical scrolling direction.
+hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "vertical", action = "workspace" })
+-- Scroll horizontally through the columns in the active workspace.
+hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "left", action = "scroll_move" })
+hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "right", action = "scroll_move" })

@@ -133,7 +133,7 @@ return {
 
     -- Apps
     kbTerminal = { "SUPER + T", "SUPER + Return" },
-    kbBrowser = { "SUPER + W", "SUPER + B" },
+    kbBrowser = "SUPER + B",
     kbEditor = "SUPER + C",
     kbFileExplorer = "SUPER + E",
     kbAudioSettings = "CTRL + ALT + V",
@@ -265,7 +265,7 @@ return {
     kbControlCenter = "SUPER + ALT + C",
     kbMediaPlayer = "SUPER + ALT + M",
     kbSystemMonitor = "SUPER + ALT + S",
-    kbWallpaperCarousel = "SUPER + SHIFT + W",
+    kbWallpaperCarousel = "SUPER + W",
 
     -- Launcher
     kbLauncher = "SUPER + space",

@@ -51,14 +51,6 @@ end
 fn.create_bind(vars.kbCloseWindow, hl.dsp.window.close())
 fn.create_bind(vars.kbWindowFullscreen, hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 fn.create_bind(vars.kbWindowMaximized, hl.dsp.window.fullscreen({ mode = "maximized" }))
-fn.create_bind(vars.kbToggleColumnWidth, function()
-    local win = hl.get_active_window()
-    local monitor = win and (win.monitor or hl.get_active_monitor())
-    if not win or not win.size or not monitor or not monitor.width then return end
-    local width = monitor.width / (monitor.scale or 1)
-    local target = win.size.x > width * 0.75 and 50 or 100
-    hl.dispatch(hl.dsp.window.resize({ x = math.floor(width * target / 100), y = 0, relative = false }))
-end)
 fn.create_bind(vars.kbToggleSplit, hl.dsp.layout("togglesplit"))
 fn.create_bind(vars.kbToggleGroup, hl.dsp.group.toggle())
 

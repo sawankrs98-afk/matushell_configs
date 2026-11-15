@@ -142,8 +142,7 @@ return {
     -- Window management
     kbCloseWindow = "SUPER + Q",
     kbWindowFullscreen = "SUPER + F",
-    kbWindowMaximized = { "SUPER + ALT + F", "SUPER + SHIFT + F" },
-    kbToggleColumnWidth = "SUPER + D",
+    kbWindowMaximized = { "SUPER + D", "SUPER + ALT + F", "SUPER + SHIFT + F" },
     kbToggleSplit = "SUPER + R",
     kbToggleGroup = "SUPER + Comma",
     kbUngroup = "SUPER + U",
@@ -158,7 +157,7 @@ return {
 
     kbPinWindow = "SUPER + P",
     kbMoveWindow = "SUPER + Z",
-    kbResizeWindow = "SUPER + X",
+    kbResizeWindow = "SUPER + ALT + X",
     kbCenterWindow = "CTRL + SUPER + Backslash",
     kbNormalizeWindow = "CTRL + SUPER + ALT + Backslash", -- 55x70 + center
     kbWindowPip = "SUPER + ALT + Backslash",
@@ -226,7 +225,7 @@ return {
     -- Special workspace toggles
     kbSystemMonitorWs = "CTRL + SHIFT + Escape",
     kbMusicWs = "SUPER + M",
-    kbCommunicationWs = "SUPER + D",
+    kbCommunicationWs = "SUPER + X",
     kbTodoWs = "SUPER + O",
     kbSpecialWs = "SUPER + S",
 

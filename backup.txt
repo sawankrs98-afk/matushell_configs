@@ -16,3 +16,8 @@ if (( found == 0 )); then
     printf 'No battery exposing charge_control_end_threshold was found.\n' >&2
     exit 1
 fi
+
+# Fish shell: initialize zoxide with the `z` command (instead of replacing `cd`):
+# if command -q zoxide
+#     zoxide init fish --cmd z | source
+# end

@@ -8,6 +8,10 @@ hl.config({
         workspace_swipe_direction_lock           = true,
         workspace_swipe_direction_lock_threshold = 10,
         workspace_swipe_create_new               = true,
+        scrolling = {
+            move_snap_to_grid = false,
+            move_snap_cursor = false,
+        },
     },
 })
 

@@ -11,15 +11,17 @@ hl.config({
     },
 })
 
--- Workspace swipe
-hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "horizontal", action = "workspace" })
--- Special workspace up
-hl.gesture({ fingers = vars.gestureFingers or 3, direction = "up", action = "special", workspace_name = "special" })
--- Suspend (4-finger down)
-hl.gesture({
-    fingers   = vars.gestureFingersMore or 4,
-    direction = "down",
-    action    = function()
-        hl.exec_cmd(vars.sleepGestureCmd or "systemctl suspend-then-hibernate")
-    end,
-})
+-- Three-finger vertical workspace navigation.
+hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "up", action = function()
+    hl.dispatch(hl.dsp.focus({ workspace = "-1" }))
+end })
+hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "down", action = function()
+    hl.dispatch(hl.dsp.focus({ workspace = "+1" }))
+end })
+-- Three-finger horizontal focus follows the scrolling column layout.
+hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "left", action = function()
+    hl.dispatch(hl.dsp.focus({ direction = "l" }))
+end })
+hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "right", action = function()
+    hl.dispatch(hl.dsp.focus({ direction = "r" }))
+end })

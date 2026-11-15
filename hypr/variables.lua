@@ -105,7 +105,7 @@ return {
     -- slide, slidevert, slidefade, slidefadevert
     workspaceStyle = "slide",
     -- dwindle, master, scrolling
-    tilingLayout = "dwindle",
+    tilingLayout = "scrolling",
 
     -- General
     allowTearing = false,
@@ -143,6 +143,7 @@ return {
     kbCloseWindow = "SUPER + Q",
     kbWindowFullscreen = "SUPER + F",
     kbWindowMaximized = { "SUPER + ALT + F", "SUPER + SHIFT + F" },
+    kbToggleColumnWidth = "SUPER + D",
     kbToggleSplit = "SUPER + R",
     kbToggleGroup = "SUPER + Comma",
     kbUngroup = "SUPER + U",
@@ -173,10 +174,10 @@ return {
     -- Focus
     -- No H/L aliases: SUPER+H opens the Hub and SUPER+L locks the session;
     -- duplicate keyspecs fire both binds.
-    kbFocusLeft = "SUPER + Left",
+    kbFocusLeft = { "SUPER + Left", "CTRL + SUPER + Left" },
     kbFocusDown = "SUPER + Down",
     kbFocusUp = "SUPER + Up",
-    kbFocusRight = "SUPER + Right",
+    kbFocusRight = { "SUPER + Right", "CTRL + SUPER + Right" },
     kbFocusLastWindow = "SUPER + End",
     kbFocusFirstWindow = "SUPER + Home",
 
@@ -197,12 +198,12 @@ return {
     kbMoveWinToWsGroup = "CTRL + SUPER + ALT",
 
     -- Workspace navigation
-    kbNextWs = { "SUPER + mouse_down", "CTRL + SUPER + Right", "SUPER + Page_Down" },
-    kbPrevWs = { "SUPER + mouse_up", "CTRL + SUPER + Left", "SUPER + Page_Up" },
+    kbNextWs = { "SUPER + mouse_down", "CTRL + SUPER + Down", "SUPER + Page_Down" },
+    kbPrevWs = { "SUPER + mouse_up", "CTRL + SUPER + Up", "SUPER + Page_Up" },
     kbNextWsGroup = "CTRL + SUPER + mouse_down",
     kbPrevWsGroup = "CTRL + SUPER + mouse_up",
-    kbMoveWinToWsNext = { "SUPER + ALT + mouse_down", "SUPER + ALT + Page_Down", "CTRL + SUPER + SHIFT + Right" },
-    kbMoveWinToWsPrev = { "SUPER + ALT + mouse_up", "SUPER + ALT + Page_Up", "CTRL + SUPER + SHIFT + Left" },
+    kbMoveWinToWsNext = { "SUPER + ALT + mouse_down", "SUPER + ALT + Page_Down", "CTRL + SUPER + SHIFT + Down" },
+    kbMoveWinToWsPrev = { "SUPER + ALT + mouse_up", "SUPER + ALT + Page_Up", "CTRL + SUPER + SHIFT + Up" },
     kbCycleNextWs = "SUPER + ALT + bracketright",
     kbCyclePrevWs = "SUPER + ALT + bracketleft",
     kbToggleLastWorkspace = "SUPER + grave",

@@ -17,6 +17,10 @@ hl.config({
 
 -- Workspace switching follows the vertical scrolling direction.
 hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "vertical", action = "workspace" })
--- Scroll horizontally through the columns in the active workspace.
-hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "left", scale = 2.0, action = "scroll_move" })
-hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "right", scale = 2.0, action = "scroll_move" })
+-- Advance exactly one column per swipe, regardless of swipe distance or speed.
+hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "left", action = function()
+    hl.dispatch(hl.dsp.layout("focus r"))
+end })
+hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "right", action = function()
+    hl.dispatch(hl.dsp.layout("focus l"))
+end })

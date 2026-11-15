@@ -18,5 +18,5 @@ hl.config({
 -- Workspace switching follows the vertical scrolling direction.
 hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "vertical", action = "workspace" })
 -- Keep the scrolling tape tied to finger movement; snap to its grid on release.
-hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "left", scale = 0.5, action = "scroll_move" })
-hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "right", scale = 0.5, action = "scroll_move" })
+hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "left", action = "scroll_move" })
+hl.gesture({ fingers = vars.workspaceSwipeFingers or 3, direction = "right", action = "scroll_move" })

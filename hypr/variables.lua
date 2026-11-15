@@ -103,7 +103,7 @@ return {
     animationSpeed = 8,
 
     -- slide, slidevert, slidefade, slidefadevert
-    workspaceStyle = "slide",
+    workspaceStyle = "slidevert",
     -- dwindle, master, scrolling
     tilingLayout = "scrolling",
 
@@ -142,7 +142,8 @@ return {
     -- Window management
     kbCloseWindow = "SUPER + Q",
     kbWindowFullscreen = "SUPER + F",
-    kbWindowMaximized = { "SUPER + D", "SUPER + ALT + F", "SUPER + SHIFT + F" },
+    kbWindowMaximized = { "SUPER + ALT + F", "SUPER + SHIFT + F" },
+    kbToggleColumnWidth = "SUPER + D",
     kbToggleSplit = "SUPER + R",
     kbToggleGroup = "SUPER + Comma",
     kbUngroup = "SUPER + U",

@@ -51,6 +51,7 @@ end
 fn.create_bind(vars.kbCloseWindow, hl.dsp.window.close())
 fn.create_bind(vars.kbWindowFullscreen, hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 fn.create_bind(vars.kbWindowMaximized, hl.dsp.window.fullscreen({ mode = "maximized" }))
+fn.create_bind(vars.kbToggleColumnWidth, hl.dsp.layout("colresize +conf"))
 fn.create_bind(vars.kbToggleSplit, hl.dsp.layout("togglesplit"))
 fn.create_bind(vars.kbToggleGroup, hl.dsp.group.toggle())
 

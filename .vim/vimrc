@@ -1,0 +1,489 @@
+" ==============================================================================
+" ~/.vimrc - Dracula Theme, Absolute Numbers, Fuzzy File Picker Only & Keybinds
+" ==============================================================================
+
+" ------------------------------------------------------------------------------
+" 1. Essential Initialization & Leader Key (MUST BE FIRST)
+" ------------------------------------------------------------------------------
+set nocompatible
+filetype plugin indent on
+syntax on
+
+let mapleader = " "
+let maplocalleader = " "
+
+" ------------------------------------------------------------------------------
+" 2. Disable Netrw Completely - FUZZY FILE PICKER ONLY!
+" ------------------------------------------------------------------------------
+" Completely disable Netrw so tree view never opens
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
+
+" If Vim is opened on a directory (e.g. 'vim .'), immediately launch FZF!
+augroup DirToFzf
+    autocmd!
+    autocmd VimEnter * if isdirectory(expand('%:p')) | cd % | bwipeout | call feedkeys(":FZF\<CR>") | endif
+augroup END
+
+" ------------------------------------------------------------------------------
+" 3. FZF Fuzzy File Picker (Telescope Parity + Live Preview & Scroll)
+" ------------------------------------------------------------------------------
+if filereadable('/usr/share/vim/vimfiles/plugin/fzf.vim')
+    source /usr/share/vim/vimfiles/plugin/fzf.vim
+endif
+
+" Floating popup window for FZF
+let g:fzf_layout = { 'window': { 'width': 0.92, 'height': 0.80 } }
+
+" Default FZF preview & navigation options:
+" - Live syntax-highlighted file preview on the right (60% width)
+" - Right / Left arrow: Scroll preview down / up
+" - Shift-Right / Shift-Left: Scroll preview page down / page up
+" - Ctrl-d / Ctrl-u: Scroll preview half page down / up
+" - Alt-Right or Ctrl-o: Open full scrollable read-only mode in bat/Vim (Esc or q returns to picker)
+let $FZF_DEFAULT_OPTS = '--preview "bat --style=numbers --color=always --line-range :500 {} 2>/dev/null || cat {}" ' .
+    \ '--preview-window "right:60%:wrap" ' .
+    \ '--bind "right:preview-down,left:preview-up,shift-right:preview-page-down,shift-left:preview-page-up,ctrl-f:preview-page-down,ctrl-b:preview-page-up,ctrl-d:preview-half-page-down,ctrl-u:preview-half-page-up,alt-right:execute(bat --pager=builtin --paging=always --style=numbers --color=always {}),ctrl-o:execute(vim -R -M -c \"nnoremap <Esc> :q<CR>\" -c \"nnoremap q :q<CR>\" {})"'
+
+" ALL file opening & explorer shortcuts launch the Fuzzy File Picker only!
+nnoremap <silent> <C-p> :FZF<CR>
+nnoremap <silent> <leader>f :FZF<CR>
+nnoremap <silent> <leader>ff :FZF<CR>
+nnoremap <silent> <leader><Space> :FZF<CR>
+nnoremap <silent> <leader>e :FZF<CR>
+
+" Project Live Grep (<leader>/, <leader>fg) with preview
+if executable('rg')
+    command! -bang -nargs=* Rg call fzf#run(fzf#wrap({
+        \ 'source': 'rg --column --line-number --no-heading --color=always --smart-case ' . shellescape(<q-args>),
+        \ 'options': '--ansi --preview "bat --style=numbers --color=always --highlight-line {2} {1} 2>/dev/null || cat {1}" --preview-window "right:60%:wrap" --bind "right:preview-down,left:preview-up,shift-right:preview-page-down,shift-left:preview-page-up"'
+        \ }))
+    nnoremap <silent> <leader>/ :Rg<CR>
+    nnoremap <silent> <leader>fg :Rg<CR>
+else
+    nnoremap <silent> <leader>/ :vimgrep // **/*<Left><Left><Left><Left><Left><Left>
+    nnoremap <silent> <leader>fg :vimgrep // **/*<Left><Left><Left><Left><Left><Left>
+endif
+
+" Buffer Picker (<leader>b, <leader>bb) with preview
+function! s:fzf_buffer_list() abort
+    let l:bufs = []
+    for l:b in range(1, bufnr('$'))
+        if buflisted(l:b)
+            let l:name = bufname(l:b)
+            let l:name = empty(l:name) ? '[No Name]' : l:name
+            let l:modified = getbufvar(l:b, '&modified') ? ' [+]' : ''
+            call add(l:bufs, printf("%3d: %s%s", l:b, l:name, l:modified))
+        endif
+    endfor
+    call fzf#run(fzf#wrap({
+        \ 'source': l:bufs,
+        \ 'options': '--preview "bat --style=numbers --color=always --line-range :500 {2} 2>/dev/null || cat {2}" --preview-window "right:60%:wrap" --bind "right:preview-down,left:preview-up"',
+        \ 'sink': {line -> execute('buffer ' . matchstr(line, '^\s*\zs\d\+'))}
+        \ }))
+endfunction
+command! Buffers call s:fzf_buffer_list()
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>bb :Buffers<CR>
+
+set path+=**
+set wildignore+=*.o,*.obj,*.bin,*.out,*.so,*.a,*.class
+set wildignore+=*/.git/*,*/node_modules/*,*/build/*,*/dist/*,*/target/*
+
+" ------------------------------------------------------------------------------
+" 4. Colorscheme: Dracula (Default Theme)
+" ------------------------------------------------------------------------------
+packadd! dracula
+try
+    colorscheme dracula
+catch
+    set background=dark
+endtry
+
+" ------------------------------------------------------------------------------
+" 5. Line Numbering: Absolute Line Numbering
+" ------------------------------------------------------------------------------
+set number
+set norelativenumber
+set numberwidth=4
+if has('patch-8.1.1564') || has('signs')
+    set signcolumn=yes
+endif
+
+" Cursorline & Colors
+set cursorline
+set hidden
+set mouse=a
+if has('termguicolors')
+    set termguicolors
+endif
+
+" Text wrapping & view context (matching Neovim options)
+set nowrap
+set linebreak
+set breakindent
+set scrolloff=4
+set sidescrolloff=8
+
+" Indentation (standard 4 spaces)
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+set shiftround
+set autoindent
+set smartindent
+
+" Splits behavior
+set splitbelow
+set splitright
+
+" Search behavior
+set ignorecase
+set smartcase
+set incsearch
+set nohlsearch
+
+" Clipboard sync with system (unnamedplus)
+if has('clipboard')
+    set clipboard=unnamedplus
+endif
+
+" Undo & history persistence (swap/backup disabled like Neovim)
+set noswapfile
+set nobackup
+set nowritebackup
+set history=10000
+set undolevels=10000
+if has('persistent_undo')
+    let s:undo_dir = expand('~/.vim/undo')
+    if !isdirectory(s:undo_dir)
+        call mkdir(s:undo_dir, 'p')
+    endif
+    set undofile
+    let &undodir = s:undo_dir
+endif
+
+" Completion wildmenu
+set wildmenu
+set wildmode=longest:full,full
+if has('patch-8.2.4325') || v:version >= 900
+    set wildoptions=pum
+endif
+set pumheight=10
+
+" Clean, Bug-Free Statusline (integrated with Dracula theme)
+set laststatus=2
+set statusline=\ %f\ %m%r%h%w\ %=\ %y\ │\ %{&fileencoding?&fileencoding:&encoding}\ │\ %p%%\ │\ %l:%c\ 
+
+" ------------------------------------------------------------------------------
+" 6. Cursor Configuration (Block Cursor with Mode-Dependent Opacity)
+" ------------------------------------------------------------------------------
+if &term =~ 'xterm\|rxvt\|alacritty\|foot\|kitty\|screen\|tmux' || !empty($COLORTERM) || !empty($TERM)
+    " Normal Mode: Solid 100% opaque, bright high-contrast block cursor
+    let &t_EI = "\<Esc>[2 q\<Esc>]12;#ffffff\<Esc>\\"
+
+    " Insert Mode: Dimmed / translucent slate block cursor
+    let &t_SI = "\<Esc>[1 q\<Esc>]12;#687b8f\<Esc>\\"
+
+    " Replace Mode: Distinct solid colored block cursor
+    let &t_SR = "\<Esc>[2 q\<Esc>]12;#ff5555\<Esc>\\"
+endif
+
+" Reset cursor appearance when exiting Vim
+augroup CursorCleanup
+    autocmd!
+    autocmd VimLeave * silent! execute '!printf "\e[0 q\e]112\a"'
+augroup END
+
+" GUI & highlight fallback
+set guicursor=n-v-c:block-Cursor,i-ci-ve:block-InsertCursor,r-cr:block-ReplaceCursor
+highlight Cursor guifg=bg guibg=#ffffff gui=nocombine
+highlight InsertCursor guifg=bg guibg=#687b8f gui=nocombine
+highlight ReplaceCursor guifg=bg guibg=#ff5555 gui=nocombine
+
+" ------------------------------------------------------------------------------
+" 7. Navigation & Centered Scrolling
+" ------------------------------------------------------------------------------
+" Visual line movement (Neovim style)
+nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+xnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+xnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+
+" Centered half-page jumps
+nnoremap <silent> <C-d> <C-d>zz
+nnoremap <silent> <C-u> <C-u>zz
+
+" Clear search highlight on Esc or <leader>nh
+nnoremap <silent> <Esc> :nohlsearch<CR>
+nnoremap <silent> <leader>nh :nohlsearch<CR>
+
+" ------------------------------------------------------------------------------
+" 8. Window Navigation & Splits
+" ------------------------------------------------------------------------------
+" Navigate windows with <Ctrl> hjkl
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Window splits
+nnoremap <silent> <leader>v :vsplit<CR>
+nnoremap <silent> <leader>\| :vsplit<CR>
+nnoremap <silent> <leader>- :split<CR>
+nnoremap <silent> <leader>s :split<CR>
+nnoremap <silent> <leader>wd :close<CR>
+nnoremap <silent> <leader>xs :close<CR>
+nnoremap <silent> <leader>se <C-w>=
+
+" Window resizing with <Ctrl> Arrow keys
+nnoremap <silent> <C-Up> :resize +2<CR>
+nnoremap <silent> <C-Down> :resize -2<CR>
+nnoremap <silent> <C-Left> :vertical resize -2<CR>
+nnoremap <silent> <C-Right> :vertical resize +2<CR>
+
+" ------------------------------------------------------------------------------
+" 9. Buffer Navigation & Management
+" ------------------------------------------------------------------------------
+nnoremap <silent> <Tab> :bnext<CR>
+nnoremap <silent> <S-Tab> :bprevious<CR>
+nnoremap <silent> <S-l> :bnext<CR>
+nnoremap <silent> <S-h> :bprevious<CR>
+nnoremap <silent> ]b :bnext<CR>
+nnoremap <silent> [b :bprevious<CR>
+
+" Alternate / MRU Buffer (<C-Tab>, <leader>ba, <leader>`)
+nnoremap <silent> <C-Tab> :b#<CR>
+nnoremap <silent> <leader>ba :b#<CR>
+nnoremap <silent> <leader>` :b#<CR>
+
+" Close Buffer (<leader>x, <leader>bd, <leader>bD)
+nnoremap <silent> <leader>x :bdelete<CR>
+nnoremap <silent> <leader>bd :bdelete<CR>
+nnoremap <silent> <leader>bD :bdelete!<CR>
+
+" Close other buffers (<leader>bo)
+function! s:close_other_buffers() abort
+    let l:current = bufnr('%')
+    for l:b in range(1, bufnr('$'))
+        if buflisted(l:b) && l:b != l:current
+            silent! execute 'bdelete ' . l:b
+        endif
+    endfor
+    echo "Closed other buffers"
+endfunction
+command! BCloseOthers call s:close_other_buffers()
+nnoremap <silent> <leader>bo :BCloseOthers<CR>
+
+" ------------------------------------------------------------------------------
+" 10. Save, Quit & Clipboard
+" ------------------------------------------------------------------------------
+" Save (<Ctrl+S> in Normal, Insert, Visual)
+nnoremap <silent> <C-s> :w<CR>
+inoremap <silent> <C-s> <C-o>:w<CR>
+vnoremap <silent> <C-s> <Esc>:w<CR>gv
+
+" Save without formatting
+nnoremap <silent> <leader>sn :noautocmd w<CR>
+
+" Quit current file (<Ctrl+Q>)
+nnoremap <silent> <C-q> :q<CR>
+nnoremap <silent> <leader>q :q<CR>
+nnoremap <silent> <leader>qq :qa<CR>
+
+" System Clipboard (<Ctrl+C>, <Ctrl+V>, <Ctrl+X>)
+vnoremap <C-c> "+y
+vnoremap <C-x> "+d
+nnoremap <C-v> "+p
+inoremap <C-v> <C-r>+
+vnoremap <C-v> "+p
+
+" Whole file operations
+nnoremap <silent> <leader>y :%y+<CR>
+nnoremap <silent> <leader>D :%d<CR>
+
+" ------------------------------------------------------------------------------
+" 11. Commenting (<Ctrl+/> & <Ctrl+_>)
+" ------------------------------------------------------------------------------
+function! ToggleCommentLine() abort
+    let l:cmt = &commentstring
+    if empty(l:cmt)
+        let l:cmt = '// %s'
+    endif
+    let l:lead = trim(split(l:cmt, '%s')[0])
+    let l:line = getline('.')
+    let l:stripped = substitute(l:line, '^\s*', '', '')
+    let l:escaped_lead = escape(l:lead, '/*#~')
+    if l:stripped =~ '^' . l:escaped_lead
+        let l:pattern = '^\(\s*\)' . l:escaped_lead . '\s\?'
+        call setline('.', substitute(l:line, l:pattern, '\1', ''))
+    else
+        let l:indent = matchstr(l:line, '^\s*')
+        call setline('.', l:indent . l:lead . ' ' . l:stripped)
+    endif
+endfunction
+
+nnoremap <silent> <C-/> :call ToggleCommentLine()<CR>
+nnoremap <silent> <C-_> :call ToggleCommentLine()<CR>
+vnoremap <silent> <C-/> :call ToggleCommentLine()<CR>
+vnoremap <silent> <C-_> :call ToggleCommentLine()<CR>
+inoremap <silent> <C-/> <C-o>:call ToggleCommentLine()<CR>
+inoremap <silent> <C-_> <C-o>:call ToggleCommentLine()<CR>
+
+" ------------------------------------------------------------------------------
+" 12. C & C++ Language Toolchain (<leader>c...)
+" ------------------------------------------------------------------------------
+function! CppCompile() abort
+    write
+    if filereadable('Makefile') || filereadable('makefile')
+        silent make! | redraw!
+        if len(getqflist()) > 0
+            copen
+            echohl ErrorMsg | echo "Makefile compilation errors!" | echohl None
+            return 0
+        else
+            cclose
+            echo "Makefile build successful!"
+            return 1
+        endif
+    endif
+
+    let l:file = expand('%:p')
+    let l:ext = expand('%:e')
+    let l:out = expand('%:p:r')
+    let l:is_c = (l:ext ==# 'c')
+    let l:compiler = l:is_c ? (executable('gcc') ? 'gcc' : 'clang') : (executable('g++') ? 'g++' : 'clang++')
+    let l:std = l:is_c ? '-std=c17' : '-std=c++20'
+    let l:cmd = printf('%s %s -O2 -Wall -Wextra %s -o %s', l:compiler, l:std, shellescape(l:file), shellescape(l:out))
+    let l:output = system(l:cmd)
+    if v:shell_error != 0
+        echohl ErrorMsg | echo "Compilation error:\n" . l:output | echohl None
+        return 0
+    else
+        echo "Compilation successful -> " . l:out
+        return 1
+    endif
+endfunction
+
+function! CppRunBinary() abort
+    let l:out = expand('%:p:r')
+    if executable(l:out)
+        if has('terminal')
+            execute 'split | terminal ' . fnameescape(l:out)
+        else
+            execute '!' . fnameescape(l:out)
+        endif
+    else
+        echohl WarningMsg | echo "Binary not found! Compile first with <leader>cb" | echohl None
+    endif
+endfunction
+
+function! CppCompileAndRun() abort
+    if CppCompile()
+        call CppRunBinary()
+    endif
+endfunction
+
+function! SwitchSourceHeader() abort
+    let l:ext = expand('%:e')
+    let l:root = expand('%:p:r')
+    let l:candidates = []
+    if index(['cpp', 'cc', 'cxx', 'c'], l:ext) >= 0
+        let l:candidates = [l:root . '.hpp', l:root . '.h', l:root . '.hxx']
+    elseif index(['hpp', 'h', 'hxx'], l:ext) >= 0
+        let l:candidates = [l:root . '.cpp', l:root . '.cc', l:root . '.cxx', l:root . '.c']
+    endif
+    for l:candidate in l:candidates
+        if filereadable(l:candidate)
+            execute 'edit ' . fnameescape(l:candidate)
+            echo "Switched to " . fnamemodify(l:candidate, ':t')
+            return
+        endif
+    endfor
+    echo "No matching source/header found."
+endfunction
+
+function! CppCheck() abort
+    if !executable('cppcheck')
+        echo "cppcheck is not installed"
+        return
+    endif
+    write
+    let l:file = expand('%:p')
+    let l:cmd = 'cppcheck --enable=all --suppress=missingIncludeSystem --template=gcc ' . shellescape(l:file)
+    let l:output = systemlist(l:cmd)
+    let l:qf = []
+    for l:line in l:output
+        let l:m = matchlist(l:line, '^\(.\{-}\):\(\d\+\):\(\d\+\):\s*\(.*\)$')
+        if !empty(l:m)
+            call add(l:qf, {'filename': l:m[1], 'lnum': str2nr(l:m[2]), 'col': str2nr(l:m[3]), 'text': l:m[4]})
+        endif
+    endfor
+    if !empty(l:qf)
+        call setqflist(l:qf, 'r')
+        copen
+    else
+        cclose
+        echo "Cppcheck: No issues found!"
+    endif
+endfunction
+
+command! CppCompile call CppCompile()
+command! CppRun call CppRunBinary()
+command! CppCompileAndRun call CppCompileAndRun()
+command! CppSwitchHeader call SwitchSourceHeader()
+command! CppCheck call CppCheck()
+
+nnoremap <silent> <leader>cb :CppCompile<CR>
+nnoremap <silent> <leader>cr :CppCompileAndRun<CR>
+nnoremap <silent> <leader>cR :CppRun<CR>
+nnoremap <silent> <leader>ch :CppSwitchHeader<CR>
+nnoremap <silent> <leader>cp :CppCheck<CR>
+
+" ------------------------------------------------------------------------------
+" 13. Lua Toolchain (<leader>lr, <leader>r)
+" ------------------------------------------------------------------------------
+function! LuaRun() abort
+    write
+    let l:file = expand('%:p')
+    if has('terminal')
+        execute 'split | terminal lua ' . fnameescape(l:file)
+    else
+        execute '!lua ' . fnameescape(l:file)
+    endif
+endfunction
+
+command! LuaRun call LuaRun()
+nnoremap <silent> <leader>lr :LuaRun<CR>
+nnoremap <silent> <leader>r :LuaRun<CR>
+
+" ------------------------------------------------------------------------------
+" 14. Code Formatting (<leader>cf / Space cf)
+" ------------------------------------------------------------------------------
+function! FormatFile() abort
+    write
+    let l:ext = expand('%:e')
+    if index(['c', 'cpp', 'cc', 'cxx', 'h', 'hpp'], l:ext) >= 0 && executable('clang-format')
+        silent execute '!clang-format -i ' . shellescape(expand('%:p'))
+        edit!
+        echo "Formatted with clang-format"
+    elseif l:ext ==# 'lua' && executable('stylua')
+        silent execute '!stylua ' . shellescape(expand('%:p'))
+        edit!
+        echo "Formatted with stylua"
+    else
+        normal! gg=G``
+        echo "Formatted with internal indenter"
+    endif
+endfunction
+
+command! Format call FormatFile()
+nnoremap <silent> <leader>cf :Format<CR>
+
+" ------------------------------------------------------------------------------
+" 15. Quick Search & Replace (<leader>ra, <leader>rw)
+" ------------------------------------------------------------------------------
+nnoremap <leader>ra :%s/\<<C-r><C-w>\>//gI<Left><Left><Left>
+nnoremap <leader>rw :%s/\<<C-r><C-w>\>//gI<Left><Left><Left>
+vnoremap <leader>ra "hy:%s/\<<C-r>h\>//gI<Left><Left><Left>

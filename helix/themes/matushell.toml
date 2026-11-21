@@ -1,0 +1,122 @@
+# Helix Matushell Theme - Dynamic Material You Palette
+
+"attribute" = { fg = "tertiary" }
+"type" = { fg = "tertiary", modifiers = ["italic"] }
+"type.builtin" = { fg = "tertiary", modifiers = ["italic"] }
+
+"constructor" = { fg = "tertiary" }
+"constant" = { fg = "tertiary" }
+"constant.builtin" = { fg = "tertiary" }
+"constant.character" = { fg = "primary" }
+"constant.character.escape" = { fg = "secondary" }
+"constant.numeric" = { fg = "tertiary" }
+
+"string" = { fg = "primary" }
+"string.regexp" = { fg = "secondary" }
+"string.special" = { fg = "secondary" }
+
+"comment" = { fg = "on_surface_variant", modifiers = ["italic"] }
+"variable" = { fg = "on_surface" }
+"variable.builtin" = { fg = "primary" }
+"variable.parameter" = { fg = "on_surface" }
+"variable.other.member" = { fg = "on_surface" }
+
+"label" = { fg = "primary" }
+"punctuation" = { fg = "on_surface_variant" }
+"punctuation.bracket" = { fg = "on_surface_variant" }
+"punctuation.delimiter" = { fg = "on_surface_variant" }
+
+"keyword" = { fg = "primary", modifiers = ["bold"] }
+"keyword.control" = { fg = "primary", modifiers = ["bold"] }
+"keyword.operator" = { fg = "secondary" }
+"keyword.directive" = { fg = "error" }
+"keyword.function" = { fg = "primary", modifiers = ["bold"] }
+
+"operator" = { fg = "secondary" }
+"function" = { fg = "secondary" }
+"function.builtin" = { fg = "primary" }
+"function.macro" = { fg = "error" }
+
+"tag" = { fg = "secondary" }
+"namespace" = { fg = "tertiary" }
+"special" = { fg = "secondary" }
+
+"markup.heading" = { fg = "primary", modifiers = ["bold"] }
+"markup.list" = { fg = "primary" }
+"markup.bold" = { modifiers = ["bold"] }
+"markup.italic" = { modifiers = ["italic"] }
+"markup.link.url" = { fg = "secondary", modifiers = ["underline"] }
+"markup.link.text" = { fg = "primary" }
+"markup.raw" = { fg = "primary" }
+
+"diff.plus" = { fg = "primary" }
+"diff.delta" = { fg = "tertiary" }
+"diff.minus" = { fg = "error" }
+
+"diagnostic" = { modifiers = ["undercurl"] }
+"diagnostic.info" = { underline = { color = "secondary", style = "curl" } }
+"diagnostic.hint" = { underline = { color = "secondary", style = "curl" } }
+"diagnostic.warning" = { underline = { color = "tertiary", style = "curl" } }
+"diagnostic.error" = { underline = { color = "error", style = "curl" } }
+
+"info" = { fg = "secondary" }
+"hint" = { fg = "secondary" }
+"warning" = { fg = "tertiary" }
+"error" = { fg = "error" }
+
+"ui.background" = { fg = "on_surface" }
+"ui.background.separator" = { fg = "outline_variant" }
+"ui.cursor" = { fg = "surface", bg = "primary" }
+"ui.cursor.normal" = { fg = "surface", bg = "primary" }
+"ui.cursor.insert" = { fg = "surface", bg = "on_surface_variant" }
+"ui.cursor.select" = { fg = "surface", bg = "tertiary" }
+"ui.cursor.match" = { fg = "primary", modifiers = ["bold", "underline"] }
+"ui.cursorline.primary" = { bg = "surface_container_high" }
+
+"ui.linenr" = { fg = "outline" }
+"ui.linenr.selected" = { fg = "primary", modifiers = ["bold"] }
+
+"ui.statusline" = { fg = "on_surface", bg = "surface_container" }
+"ui.statusline.inactive" = { fg = "on_surface_variant", bg = "surface_container_low" }
+"ui.statusline.normal" = { fg = "surface", bg = "primary", modifiers = ["bold"] }
+"ui.statusline.insert" = { fg = "surface", bg = "tertiary", modifiers = ["bold"] }
+"ui.statusline.select" = { fg = "surface", bg = "secondary", modifiers = ["bold"] }
+
+"ui.bufferline" = { fg = "on_surface_variant", bg = "surface_container_low" }
+"ui.bufferline.active" = { fg = "primary", bg = "surface_container_high", modifiers = ["bold"] }
+
+"ui.popup" = { fg = "on_surface", bg = "surface_container" }
+"ui.window" = { fg = "outline_variant" }
+"ui.help" = { fg = "on_surface", bg = "surface_container" }
+
+"ui.text" = { fg = "on_surface" }
+"ui.text.focus" = { fg = "on_primary_container", bg = "primary_container", modifiers = ["bold"] }
+"ui.text.inactive" = { fg = "on_surface_variant" }
+
+"ui.virtual.ruler" = { bg = "surface_container" }
+"ui.virtual.indent-guide" = { fg = "outline_variant" }
+"ui.virtual.inlay-hint" = { fg = "outline" }
+
+"ui.selection" = { fg = "on_primary_container", bg = "primary_container" }
+"ui.selection.primary" = { fg = "on_primary_container", bg = "primary_container" }
+
+[palette]
+surface = "#0B0F11"
+surface_container = "#141A1E"
+surface_container_low = "#0F1417"
+surface_container_high = "#1A2124"
+surface_container_highest = "#1F272B"
+on_surface = "#DEE7ED"
+on_surface_variant = "#A4ACB2"
+outline = "#6E777C"
+outline_variant = "#41494E"
+primary = "#A3CCE3"
+primary_container = "#2E576B"
+on_primary = "#184557"
+on_primary_container = "#C1E9FF"
+secondary = "#B4CAD6"
+secondary_container = "#2A3E48"
+tertiary = "#B8C5F2"
+tertiary_container = "#38466B"
+on_tertiary_container = "#DAE2FF"
+error = "#FA746F"

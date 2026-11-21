@@ -1,0 +1,8 @@
+layout {
+    focus-ring {
+        off
+    }
+    shadow {
+        off
+    }
+}

@@ -1,0 +1,129 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// 30 — Window rules
+// ─────────────────────────────────────────────────────────────────────────────
+// Docs: https://niri-wm.github.io/niri/Configuration:-Window-Rules
+//
+// Rules are evaluated top-to-bottom. A window can match multiple rules and
+// all matching properties accumulate. Use `niri msg windows` to inspect
+// app-id and title of running windows.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Global defaults ─────────────────────────────────────────────────────────
+// Round every window's corners and clip content to match.
+// Works best with prefer-no-csd (set in config.kdl).
+window-rule {
+    opacity 0.95
+    geometry-corner-radius 12
+    clip-to-geometry true
+    background-effect {
+        blur true
+        xray false
+    }
+}
+
+// Make all apps transparent enough to see behind them
+window-rule {
+}
+
+// Inactive window opacity (same as normal: 1.0)
+window-rule {
+    match is-active=false
+    opacity 0.85
+}
+
+// Keep terminals transparent and blurry even when active
+window-rule {
+    match app-id=r#"^(alacritty|kitty|wezterm)$"#
+    opacity 1.0
+    background-effect {
+        blur true
+    }
+}
+
+// Disable blur specifically for foot terminal (for crisp Neovim coding)
+
+// Frosted glass blur settings
+blur {
+    passes 4
+    offset 7
+    noise 0.02
+    saturation 1.0
+}
+
+// ── Per-app fixes ───────────────────────────────────────────────────────────
+
+// Hide xembedsniproxy completely
+window-rule {
+    match app-id="xembedsniproxy"
+    open-floating true
+    opacity 0.0
+    // push to bottom layer to not block input if possible, or just size it small
+    default-column-width {}
+}
+
+// WezTerm: work around initial configure bug (needs an empty default width).
+window-rule {
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
+}
+
+// Picture-in-picture opens floating: Firefox and Zen title it "Picture-in-Picture", Chromium browsers
+// "Picture in picture" and, before Brave 1.96, with no app-id at all, so the title alone decides.
+window-rule {
+    match title=r#"(?i)^picture.in.picture$"#
+    open-floating true
+}
+
+// Dialogs and file choosers should float instead of tiling as narrow columns
+window-rule {
+    match title=r#"^(Open|Save|Choose|Select|Browse|File|Directory)"#
+    open-floating true
+}
+window-rule {
+    match app-id=r#"^(xdg-desktop-portal-gtk|org\.freedesktop\.impl\.portal\.desktop\.gtk)$"#
+    open-floating true
+}
+
+// ── Privacy: block password managers from screen capture ────────────────────
+// Uncomment the block below to hide these apps during screencasts.
+// /-window-rule {
+//     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+//     match app-id=r#"^org\.gnome\.World\.Secrets$"#
+//     block-out-from "screen-capture"
+// }
+
+// ── Floating apps ───────────────────────────────────────────────────────────
+// Apps that work better as floating windows.
+// window-rule {
+//     match app-id="pavucontrol"
+//     open-floating true
+// }
+// window-rule {
+//     match app-id="nm-connection-editor"
+//     open-floating true
+// }
+// window-rule {
+//     match app-id=r#"^org\.gnome\.Calculator$"#
+//     open-floating true
+// }
+
+// VLC media player - full opacity and no blur
+window-rule {
+    match app-id=r#"^(vlc|org\.videolan\.VLC)$"#
+    opacity 1.0
+    background-effect {
+        blur false
+    }
+}
+
+// On-demand VRR: variable refresh rate only turns on for windows matched here.
+// Add your own app-ids to extend it, or remove the block to keep VRR always off.
+window-rule {
+    match app-id="^(gamescope|steam_app_[0-9]+|lutris|heroic|com\\.heroicgameslauncher\\.hgl)$"
+
+    variable-refresh-rate true
+    opacity 1.0
+    background-effect {
+        blur false
+    }
+}

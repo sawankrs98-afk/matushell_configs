@@ -1,0 +1,184 @@
+# ~/.config/helix/config.toml
+# Helix Configuration: VS Code Muscle Memory + Neovim Leader Key Fusion
+
+theme = "dracula"
+
+[editor]
+line-number = "absolute"
+cursorline = true
+mouse = true
+bufferline = "always"
+auto-completion = true
+completion-trigger-len = 1
+completion-timeout = 250
+preview-completion-insert = false
+completion-replace = true
+end-of-line-diagnostics = "hint"
+
+[editor.cursor-shape]
+normal = "block"
+insert = "block"
+select = "underline"
+
+[editor.file-picker]
+hidden = false
+
+[editor.lsp]
+enable = true
+display-messages = true
+auto-signature-help = true
+display-inlay-hints = true
+snippets = true
+
+[editor.inline-diagnostics]
+cursor-line = "warning"
+
+# -----------------------------------------------------------------------------
+# Keybindings (VS Code Shortcuts + Neovim Leader Key Fusion)
+# -----------------------------------------------------------------------------
+
+# --- NORMAL MODE ---
+[keys.normal]
+# VS Code Classic Shortcuts
+"C-s" = ":w"                                     # Save file
+"C-p" = "file_picker"                            # Quick Open Files
+"C-f" = "search"                                 # Find in current file
+"C-F" = "global_search"                          # Global Project Search (Ctrl+Shift+F)
+"C-z" = "undo"                                   # Undo
+"C-y" = "redo"                                   # Redo
+"C-a" = "select_all"                             # Select All
+"C-c" = "yank_to_clipboard"                      # Copy
+"C-v" = "paste_clipboard_before"                 # Paste
+"C-x" = ["yank_to_clipboard", "delete_selection"]# Cut
+"C-/" = "toggle_comments"                        # Toggle Comments
+"C-_" = "toggle_comments"                        # Toggle Comments (terminal code)
+"C-w" = ":buffer-close"                          # Close Buffer Tab
+"C-q" = ":q"                                     # Quit
+"tab" = ":buffer-next"                           # Cycle Next Tab
+"S-tab" = ":buffer-previous"                     # Cycle Previous Tab
+"C-tab" = ":buffer-next"                         # Cycle Next Tab
+"C-S-tab" = ":buffer-previous"                   # Cycle Previous Tab
+"S-l" = ":buffer-next"                           # Next buffer (Neovim Shift+L)
+"S-h" = ":buffer-previous"                       # Prev buffer (Neovim Shift+H)
+"]"."b" = ":buffer-next"                         # Next buffer (Neovim ]b)
+"["."b" = ":buffer-previous"                     # Prev buffer (Neovim [b)
+"esc" = ["collapse_selection", "keep_primary_selection"] # Clear multi-cursors / selection
+
+# Centered scrolling (Neovim Ctrl+d / Ctrl+u)
+"C-d" = ["half_page_down", "align_view_center"]
+"C-u" = ["half_page_up", "align_view_center"]
+
+# Window Navigation with Ctrl+hjkl (Neovim)
+"C-h" = "jump_view_left"
+"C-j" = "jump_view_down"
+"C-k" = "jump_view_up"
+"C-l" = "jump_view_right"
+
+# Shift + Arrow Keys to Select (VS Code)
+"S-left" = "extend_char_left"
+"S-right" = "extend_char_right"
+"S-up" = "extend_line_up"
+"S-down" = "extend_line_down"
+"C-S-left" = "extend_prev_word_start"
+"C-S-right" = "extend_next_word_end"
+"S-home" = "extend_to_line_start"
+"S-end" = "extend_to_line_end"
+
+# Neovim Space Leader Shortcuts (<Space>...)
+"space"."space" = "file_picker"                  # Telescope: Find Files
+"space"."f"."f" = "file_picker"                  # Telescope: Find Files
+"space"."f"."g" = "global_search"                # Telescope: Live Grep
+"space"."/" = "global_search"                    # Telescope: Live Grep
+"space"."b"."b" = "buffer_picker"                # Telescope: Buffers
+"space"."b"."d" = ":buffer-close"                # Buffer Close
+"space"."b"."o" = ":buffer-close-others"         # Close Other Buffers
+"space"."e" = "file_picker"                      # Explorer File Picker
+
+# LSP / Code Actions (<Space>c... and direct)
+"space"."c"."a" = "code_action"                  # Code Action
+"space"."c"."r" = "rename_symbol"                # Rename Symbol
+"space"."c"."f" = "format_selections"            # Format Buffer / Selection
+"space"."c"."d" = "diagnostics_picker"           # LSP Diagnostics
+"space"."c"."c" = "toggle_comments"              # Toggle Comments
+"space"."c"."x" = "toggle_comments"              # Toggle Comments
+"space"."a" = "code_action"                      # Code Action (alternate)
+"space"."d" = "diagnostics_picker"               # LSP Diagnostics (alternate)
+"space"."r" = "rename_symbol"                    # Rename Symbol (alternate)
+"space"."s" = "symbol_picker"                    # Document Symbols
+"space"."S" = "workspace_symbol_picker"          # Workspace Symbols
+"space"."k" = "hover"                            # Hover Documentation
+"K" = "hover"                                    # Neovim Hover
+
+# Window Splits (<Space>w... and <Space>v / <Space>-)
+"space"."v" = "vsplit"                           # Vertical Split
+"space"."|" = "vsplit"                           # Vertical Split (alternate)
+"space"."-" = "hsplit"                           # Horizontal Split
+"space"."w"."v" = "vsplit"                       # Vertical Split
+"space"."w"."s" = "hsplit"                       # Horizontal Split
+"space"."w"."h" = "jump_view_left"               # Focus Left Split
+"space"."w"."j" = "jump_view_down"               # Focus Down Split
+"space"."w"."k" = "jump_view_up"                 # Focus Up Split
+"space"."w"."l" = "jump_view_right"              # Focus Right Split
+"space"."w"."q" = "wclose"                       # Close Split
+"space"."w"."d" = "wclose"                       # Close Split
+"space"."w"."o" = "wonly"                        # Only Current Split
+"space"."q" = ":q"                               # Quit
+"space"."Q" = ":quit-all"                        # Quit All
+"space"."x" = ":buffer-close"                    # Close Current Buffer
+"space"."n"."h" = "keep_primary_selection"       # Clear highlights
+
+# Navigation
+"g"."d" = "goto_definition"
+"g"."r" = "goto_reference"
+"g"."i" = "goto_implementation"
+"g"."t" = "goto_type_definition"
+
+# --- INSERT MODE ---
+[keys.insert]
+"C-s" = ":w"                                     # Save directly while typing
+"C-z" = "undo"                                   # Undo
+"C-y" = "redo"                                   # Redo
+"C-a" = ["normal_mode", "select_all"]            # Select all
+"C-c" = "yank_to_clipboard"                      # Copy
+"C-v" = "paste_clipboard_before"                 # Paste
+"C-x" = ["yank_to_clipboard", "delete_selection"]# Cut
+"C-/" = "toggle_comments"                        # Toggle comments
+"C-_" = "toggle_comments"                        # Toggle comments
+"C-space" = "completion"                         # Trigger Autocomplete (VS Code)
+"C-p" = ["normal_mode", "file_picker"]           # Quick Open Files
+
+# Shift + Arrow Keys in Insert Mode (Selects text like VS Code)
+"S-left" = ["normal_mode", "extend_char_left"]
+"S-right" = ["normal_mode", "extend_char_right"]
+"S-up" = ["normal_mode", "extend_line_up"]
+"S-down" = ["normal_mode", "extend_line_down"]
+"C-S-left" = ["normal_mode", "extend_prev_word_start"]
+"C-S-right" = ["normal_mode", "extend_next_word_end"]
+"S-home" = ["normal_mode", "extend_to_line_start"]
+"S-end" = ["normal_mode", "extend_to_line_end"]
+
+# Quick-escape to Normal mode
+"esc" = "normal_mode"
+"j" = { "k" = "normal_mode" }
+
+# --- SELECT MODE ---
+[keys.select]
+"C-s" = ":w"
+"C-c" = ["yank_to_clipboard", "collapse_selection", "normal_mode"] # Copy selection
+"C-v" = "replace_selections_with_clipboard"      # Paste over selection
+"C-x" = ["yank_to_clipboard", "delete_selection"]# Cut selection
+"C-a" = "select_all"
+"C-/" = "toggle_comments"
+"C-_" = "toggle_comments"
+"backspace" = "delete_selection"
+"del" = "delete_selection"
+
+# Shift + Arrow Keys to adjust selection
+"S-left" = "extend_char_left"
+"S-right" = "extend_char_right"
+"S-up" = "extend_line_up"
+"S-down" = "extend_line_down"
+"C-S-left" = "extend_prev_word_start"
+"C-S-right" = "extend_next_word_end"
+"S-home" = "extend_to_line_start"
+"S-end" = "extend_to_line_end"

@@ -1,0 +1,90 @@
+# ~/.config/helix/languages.toml
+# Language Servers & Formatters Configuration for Helix
+
+# -----------------------------------------------------------------------------
+# 1. Language Servers Definitions
+# -----------------------------------------------------------------------------
+
+[language-server.clangd]
+command = "clangd"
+args = [
+    "--background-index",
+    "--clang-tidy",
+    "--header-insertion=iwyu",
+    "--completion-style=detailed",
+]
+
+[language-server.pyright]
+command = "pyright-langserver"
+args = ["--stdio"]
+[language-server.pyright.config.python.analysis]
+typeCheckingMode = "basic"
+autoSearchPaths = true
+useLibraryCodeForTypes = true
+
+[language-server.ruff]
+command = "ruff"
+args = ["server"]
+
+[language-server.lua-language-server]
+command = "lua-language-server"
+
+[language-server.rust-analyzer]
+command = "rust-analyzer"
+[language-server.rust-analyzer.config.check]
+command = "clippy"
+
+# -----------------------------------------------------------------------------
+# 2. Languages Mapping
+# -----------------------------------------------------------------------------
+
+[[language]]
+name = "cpp"
+auto-format = true
+language-servers = ["clangd"]
+formatter = { command = "clang-format" }
+
+[[language]]
+name = "c"
+auto-format = true
+language-servers = ["clangd"]
+formatter = { command = "clang-format" }
+
+[[language]]
+name = "rust"
+auto-format = true
+language-servers = ["rust-analyzer"]
+
+[[language]]
+name = "python"
+auto-format = true
+language-servers = [
+    { name = "pyright", except-features = ["diagnostics"] },
+    "ruff"
+]
+formatter = { command = "ruff", args = ["format", "-"] }
+
+[[language]]
+name = "lua"
+auto-format = true
+language-servers = ["lua-language-server"]
+
+[[language]]
+name = "markdown"
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "markdown"] }
+
+[[language]]
+name = "bash"
+auto-format = true
+language-servers = ["bash-language-server"]
+formatter = { command = "shfmt", args = ["-i", "4"] }
+
+[language-server.sqls]
+command = "sqls"
+
+[[language]]
+name = "sql"
+auto-format = true
+language-servers = ["sqls"]
+formatter = { command = "sqlfluff", args = ["format", "--dialect", "ansi", "-q", "-"] }

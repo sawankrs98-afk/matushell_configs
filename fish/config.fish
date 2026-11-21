@@ -71,24 +71,10 @@ if status is-interactive
         zoxide init fish --cmd z | source
     end
 
-    # Greeting: Matushell banner + Fastfetch
+    # Greeting: Fastfetch
     function fish_greeting
         # Clear the screen
         clear
-
-        # Run the Welcome Banner ONLY once per session
-        if not set -q SESSION_INITIALIZED
-            set -gx SESSION_INITIALIZED 1
-            if test (tput cols) -ge 110; and command -q figlet
-                set -l padding "    "
-                set -l banner (figlet -f smslant "Matushell" | sed "s/^/$padding/")
-                for line in $banner
-                    if string match -rq '\S' -- "$line"
-                        printf '\e[36m%s\e[0m\n' "$line"
-                    end
-                end
-            end
-        end
 
         # Run Fastfetch EVERY time (if the window isn't tiny)
         if test (tput cols) -ge 90; and test "$TERM_PROGRAM" != "vscode"; and command -q fastfetch
